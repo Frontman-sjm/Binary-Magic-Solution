@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>이진수를 활용한 마술</title>
+  <style>
+    h2 {
+      color: #4682b4;
+      margin-top: 30px;
+      margin-bottom: 10px;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f8ff;
+      text-align: center;
+      padding: 40px;
+    }
+
+    h1 {
+      color: #1e90ff;
+    }
+
+    table {
+      display: inline-block;
+      margin: 20px;
+      border-collapse: collapse;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    td {
+      width: 70px;
+      height: 50px;
+      text-align: center;
+      vertical-align: middle;
+      border: 2px solid #1e90ff;
+      font-size: 18px;
+      background-color: #ffffff;
+    }
+
+    input {
+      width: 60px;
+      height: 30px;
+      font-size: 16px;
+      text-align: center;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+    }
+
+    input.correct {
+      background-color: #c0f5c0 !important;
+    }
+
+    input.incorrect {
+      background-color: #f5c0c0 !important;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #1e90ff;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    button:hover {
+      background-color: #1c86ee;
+    }
+
+    .section {
+      transition: opacity 0.6s ease, visibility 0.6s ease;
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      position: absolute;
+      left: -9999px;
+    }
+
+    .correct-flash {
+      animation: flashHighlight 0.6s ease;
+    }
+
+    .fade-out {
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.8s ease;
+    }
+
+    .fade-in {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 0.8s ease;
+    }
+
+    @keyframes flashHighlight {
+      0% { background-color: #ffffff; transform: scale(1); }
+      50% { background-color: #c0f5c0; transform: scale(1.05); }
+      100% { background-color: #ffffff; transform: scale(1); }
+    }
+
+    #magicPrompt button {
+      margin: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #32cd32;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+
+    #magicPrompt button:hover {
+      background-color: #28a428;
+    }
+
+    .section-transition {
+        transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+
+    b {
+        color: red;
+    }
+
+  </style>
+</head>
+<body>
+
+<h1>마술의 비밀을 풀어봅시다!</h1>
+
+<!-- 첫 번째 표 -->
+<div id="firstSection" class="section">
+  <h2>첫 번째 표</h2>
+  <table id="numberTable1">
+    <tr>
+      <td>8</td><td>10</td><td>13</td><td>14</td>
+    </tr>
+    <tr>
+      <td>12</td><td>9</td><td>11</td><td>15</td>
+    </tr>
+  </table>
+
+  <table id="inputTable1">
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+  </table>
+
+  <div class="center-button">
+      <button onclick="checkFirst()">정답 확인</button>
+  </div>
+</div>
+
+<!-- 두 번째 표 -->
+<div id="secondSection" class="section hidden">
+  <h2>두 번째 표</h2>
+  <table id="numberTable2">
+    <tr>
+      <td>12</td><td>5</td><td>15</td><td>13</td>
+    </tr>
+    <tr>
+      <td>4</td><td>6</td><td>7</td><td>14</td>
+    </tr>
+  </table>
+
+  <table id="inputTable2">
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+  </table>
+
+  <div class="center-button">
+    <button onclick="checkSecond()">정답 확인</button>
+  </div>
+</div>
+
+<!-- 세 번째 표 -->
+<div id="thirdSection" class="section hidden">
+  <h2>세 번째 표</h2>
+  <table id="numberTable3">
+    <tr>
+      <td>11</td><td>7</td><td>15</td><td>2</td>
+    </tr>
+    <tr>
+      <td>10</td><td>3</td><td>6</td><td>14</td>
+    </tr>
+  </table>
+
+  <table id="inputTable3">
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+  </table>
+
+  <div class="center-button">
+    <button onclick="checkThird()">정답 확인</button>
+  </div>
+</div>
+
+<!-- 네 번째 표 -->
+<div id="fourSection" class="section hidden">
+  <h2>네 번째 표</h2>
+  <table id="numberTable4">
+    <tr>
+      <td>9</td><td>5</td><td>15</td><td>1</td>
+    </tr>
+    <tr>
+      <td>7</td><td>13</td><td>3</td><td>11</td>
+    </tr>
+  </table>
+
+  <table id="inputTable4">
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+    <tr>
+      <td><input type="text"></td><td><input type="text"></td>
+      <td><input type="text"></td><td><input type="text"></td>
+    </tr>
+  </table>
+
+  <div class="center-button">
+    <button onclick="checkFour()">정답 확인</button>
+  </div>
+</div>
+
+<!--모든 표 변환 결과-->
+<div id="allTableAnswer" class="section hidden">
+  <h2>첫 번째 표 변환 결과</h2>
+  <table id="numberTable1Anwser">
+    <tr>
+      <td>8</td><td>10</td><td>13</td><td>14</td>
+    </tr>
+    <tr>
+      <td>12</td><td>9</td><td>11</td><td>15</td>
+    </tr>
+  </table>
+
+  <table id="binaryTable1Anwser">
+    <tr>
+      <td>1000</td><td>1010</td><td>1101</td><td>1110</td>
+    </tr>
+    <tr>
+      <td>1100</td><td>1001</td><td>1011</td><td>1111</td>
+    </tr>
+  </table>
+
+  <h2>두 번째 표 변환 결과</h2>
+  <table id="numberTable2Anwser">
+    <tr>
+      <td>12</td><td>5</td><td>15</td><td>13</td>
+    </tr>
+    <tr>
+      <td>4</td><td>6</td><td>7</td><td>14</td>
+    </tr>
+  </table>
+
+  <table id="binaryTable2Anwser">
+    <tr>
+      <td>1100</td><td>0101</td><td>1111</td><td>1101</td>
+    </tr>
+    <tr>
+      <td>0100</td><td>0110</td><td>0111</td><td>1110</td>
+    </tr>
+  </table>
+
+  <h2>세 번째 표 변환 결과</h2>
+  <table id="numberTable3Anwser">
+    <tr>
+      <td>11</td><td>7</td><td>15</td><td>2</td>
+    </tr>
+    <tr>
+      <td>10</td><td>3</td><td>6</td><td>14</td>
+    </tr>
+  </table>
+
+  <table id="binaryTable3Anwser">
+    <tr>
+      <td>1011</td><td>0111</td><td>1111</td><td>0010</td>
+    </tr>
+    <tr>
+      <td>1010</td><td>0011</td><td>0110</td><td>1110</td>
+    </tr>
+  </table>
+
+  <h2>네 번째 표 변환 결과</h2>
+  <table id="numberTable4Anwser">
+    <tr>
+      <td>9</td><td>5</td><td>15</td><td>1</td>
+    </tr>
+    <tr>
+      <td>7</td><td>13</td><td>3</td><td>11</td>
+    </tr>
+  </table>
+
+  <table id="binaryTable4Anwser">
+    <tr>
+      <td>1001</td><td>0101</td><td>1111</td><td>0001</td>
+    </tr>
+    <tr>
+      <td>0111</td><td>1101</td><td>0011</td><td>1011</td>
+    </tr>
+  </table>
+
+  <div class="center-button">
+    <button onclick="Next1()">다음</button>
+  </div>
+</div>
+
+<div id="numberSelection" class="section hidden">
+  <p style="font-size: 20px;">0부터 15 사이 숫자를 선택해주세요.</p>
+  <button onclick="Next2()">다음</button>
+</div>
+
+<div id="selectionTable1" class="section hidden">
+  <h2>첫 번째 표의 비밀</h2>
+  <h3>2^3의 자릿수가 모두 1이다.</h3>
+  <table id="numberTable1Anwser">
+    <tr>
+      <td>8(<b>1</b>000)</td><td>10(<b>1</b>010)</td><td>13(<b>1</b>101)</td><td>14(<b>1</b>110)</td>
+    </tr>
+    <tr>
+      <td>12(<b>1</b>100)</td><td>9(<b>1</b>001)</td><td>11(<b>1</b>011)</td><td>15(<b>1</b>111)</td>
+    </tr>
+  </table>
+
+  <p style="font-size: 18px; margin-top: 20px;">이 표에 선택한 숫자가 있나요?</p>
+    <div>
+        <button onclick="handleAnswerYes1()">예</button>
+        <button onclick="handleAnswerNo1()">아니요</button>
+    </div>
+</div>
+
+<div id="selectionTable2" class="section hidden">
+  <h2>두 번째 표의 비밀</h2>
+  <h3>2^2의 자릿수가 모두 1이다.</h3>
+  <table id="numberTable2Anwser">
+    <tr>
+      <td>12(1<b>1</b>00)</td><td>5(0<b>1</b>01)</td><td>15(1<b>1</b>11)</td><td>13(1<b>1</b>01)</td>
+    </tr>
+    <tr>
+      <td>4(0<b>1</b>00)</td><td>6(0<b>1</b>10)</td><td>7(0<b>1</b>11)</td><td>14(1<b>1</b>10)</td>
+    </tr>
+  </table>
+
+  <p style="font-size: 18px; margin-top: 20px;">이 표에 선택한 숫자가 있나요?</p>
+    <div>
+        <button onclick="handleAnswerYes2()">예</button>
+        <button onclick="handleAnswerNo2()">아니요</button>
+    </div>
+</div>
+
+<div id="selectionTable3" class="section hidden">
+  <h2>세 번째 표의 비밀</h2>
+  <h3>2^1의 자릿수가 모두 1이다.</h3>
+  <table id="numberTable3Anwser">
+    <tr>
+      <td>11(10<b>1</b>1)</td><td>7(01<b>1</b>1)</td><td>15(11<b>1</b>1)</td><td>2(00<b>1</b>0)</td>
+    </tr>
+    <tr>
+      <td>10(10<b>1</b>0)</td><td>3(00<b>1</b>1)</td><td>6(01<b>1</b>0)</td><td>14(11<b>1</b>0)</td>
+    </tr>
+  </table>
+
+  <p style="font-size: 18px; margin-top: 20px;">이 표에 선택한 숫자가 있나요?</p>
+    <div>
+        <button onclick="handleAnswerYes3()">예</button>
+        <button onclick="handleAnswerNo3()">아니요</button>
+    </div>
+</div>
+
+<div id="selectionTable4" class="section hidden">
+  <h2>네 번째 표의 비밀</h2>
+  <h3>2^0의 자릿수가 모두 1이다.</h3>
+  <table id="numberTable4Anwser">
+    <tr>
+      <td>9(100<b>1</b>)</td><td>5(010<b>1</b>)</td><td>15(111<b>1</b>)</td><td>1(000<b>1</b>)</td>
+    </tr>
+    <tr>
+      <td>7(011<b>1</b>)</td><td>13(110<b>1</b>)</td><td>2(001<b>1</b>)</td><td>11(101<b>1</b>)</td>
+    </tr>
+  </table>
+
+  <p style="font-size: 18px; margin-top: 20px;">이 표에 선택한 숫자가 있나요?</p>
+    <div>
+        <button onclick="handleAnswerYes4()">예</button>
+        <button onclick="handleAnswerNo4()">아니요</button>
+    </div>
+</div>
+
+<div id="finalButton" class="section hidden">
+    <button onclick="binaryToDecimal()">10진수로 바꾸기</button>
+</div>
+
+<div id="solutionBinary" class="section hidden" style="margin-top: 30px; font-size: 24px; color: #333;">
+    <h3>내가 선택한 숫자의 이진수 표현<h3><br>
+    <span id="bit3" style="display: inline-block; width: 30px; text-align: center;"><h3><p>_</p></h3></span>
+    <span id="bit2" style="display: inline-block; width: 30px; text-align: center;"><h3><p>_</p></h3></span>
+    <span id="bit1" style="display: inline-block; width: 30px; text-align: center;"><h3><p>_</p></h3></span>
+    <span id="bit0" style="display: inline-block; width: 30px; text-align: center;"><h3><p>_</p></h3></span>
+</div>
+
+<div id="finalResult" class="section hidden">
+    <h1>당신이 고른 숫자는 <p><span id="decimalResult">_</span></p>입니다.</h1>
+</div>
+
+<script>
+  function checkAnswersForPair(numberTableId, inputTableId) {
+    const numberTable = document.getElementById(numberTableId);
+    const inputTable = document.getElementById(inputTableId);
+
+    let allCorrect = true;
+
+    for (let row = 0; row < numberTable.rows.length; row++) {
+      for (let col = 0; col < numberTable.rows[row].cells.length; col++) {
+        const numberCell = numberTable.rows[row].cells[col];
+        const inputCell = inputTable.rows[row].cells[col].firstElementChild;
+
+        const number = parseInt(numberCell.textContent);
+        const correctBinary = number.toString(2);
+
+        inputCell.classList.remove('correct', 'incorrect');
+
+        if (inputCell.value.trim() === correctBinary) {
+          inputCell.classList.add('correct');
+        } else {
+          inputCell.classList.add('incorrect');
+          allCorrect = false;
+        }
+      }
+    }
+
+    return allCorrect;
+  }
+
+    //첫번째 표 정답 확인
+    function checkFirst() {
+        const correct = checkAnswersForPair('numberTable1', 'inputTable1');
+
+            if (correct) {
+            const first = document.getElementById('firstSection');
+            const second = document.getElementById('secondSection');
+
+            // 표와 입력란에 시각적 효과 추가
+            const numberTable = document.getElementById('numberTable1');
+            const inputTable = document.getElementById('inputTable1');
+
+            numberTable.classList.add('correct-flash');
+            inputTable.classList.add('correct-flash');
+
+            setTimeout(() => {
+                // 표 숨기기 + 다음 표 보여주기
+                first.classList.add('hidden');
+                second.classList.remove('hidden');
+
+                // 효과 제거 (나중에 재사용 가능하도록)
+                numberTable.classList.remove('correct-flash');
+                inputTable.classList.remove('correct-flash');
+            }, 800); // 플래시 효과 후 전환
+        }
+    }
+
+    // 두번째표 정답 확인
+    function checkSecond() {
+        const correct = checkAnswersForPair('numberTable2', 'inputTable2');
+
+            if (correct) {
+                const second = document.getElementById('secondSection');
+                const third = document.getElementById('thirdSection');
+
+                const numberTable = document.getElementById('numberTable2');
+                const inputTable = document.getElementById('inputTable2');
+
+                numberTable.classList.add('correct-flash');
+                inputTable.classList.add('correct-flash');
+
+                setTimeout(() => {
+                    second.classList.add('hidden');
+                    third.classList.remove('hidden');
+
+                    numberTable.classList.remove('correct-flash');
+                    inputTable.classList.remove('correct-flash');
+                }, 800);
+            }
+    }
+
+    //세번째표 정답 확인
+    function checkThird() {
+        const correct = checkAnswersForPair('numberTable3', 'inputTable3');
+
+            if (correct) {
+            const second = document.getElementById('thirdSection');
+            const third = document.getElementById('fourSection');
+
+            const numberTable = document.getElementById('numberTable3');
+            const inputTable = document.getElementById('inputTable3');
+
+            numberTable.classList.add('correct-flash');
+            inputTable.classList.add('correct-flash');
+
+            setTimeout(() => {
+                second.classList.add('hidden');
+                third.classList.remove('hidden');
+
+                numberTable.classList.remove('correct-flash');
+                inputTable.classList.remove('correct-flash');
+            }, 800);
+        }
+    }
+
+    //네번째 표 정답 확인
+    function checkFour() {
+        const correct = checkAnswersForPair('numberTable4', 'inputTable4');
+
+            if (correct) {
+            const four = document.getElementById('fourSection');
+            const allTable = document.getElementById('allTableAnswer');
+
+            // 표와 입력란에 시각적 효과 추가
+            const numberTable = document.getElementById('numberTable4');
+            const inputTable = document.getElementById('inputTable4');
+
+            numberTable.classList.add('correct-flash');
+            inputTable.classList.add('correct-flash');
+
+            setTimeout(() => {
+                // 표 숨기기 + 다음 표 보여주기
+                four.classList.add('hidden');
+                allTable.classList.remove('hidden');
+
+                // 효과 제거 (나중에 재사용 가능하도록)
+                numberTable.classList.remove('correct-flash');
+                inputTable.classList.remove('correct-flash');
+            }, 800); // 플래시 효과 후 전환
+        }
+    }
+
+    function Next1() {
+        const allTable = document.getElementById('allTableAnswer');
+        const selection = document.getElementById('numberSelection');
+
+        setTimeout(() => {
+            allTable.classList.add('hidden');
+            selection.classList.remove('hidden');
+        })
+    }
+    
+    function Next2() {
+        const selection = document.getElementById('numberSelection');
+        const table = document.getElementById('selectionTable1');
+        const solution = document.getElementById('solutionBinary');
+
+        setTimeout(() => {
+            selection.classList.add('hidden');
+            table.classList.remove('hidden');
+            solution.classList.remove('hidden');
+        })        
+    }
+
+    function handleAnswerYes1() {
+        document.getElementById("bit3").textContent = "1";
+
+        const table1 = document.getElementById('selectionTable1');
+        const table2 = document.getElementById('selectionTable2');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            table2.classList.remove('hidden');
+        }) 
+    }
+
+    function handleAnswerNo1() {
+        document.getElementById("bit3").textContent = "0";
+
+        const table1 = document.getElementById('selectionTable1');
+        const table2 = document.getElementById('selectionTable2');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            table2.classList.remove('hidden');
+        }) 
+        
+    }
+
+    function handleAnswerYes2() {
+        document.getElementById("bit2").textContent = "1";
+
+        const table1 = document.getElementById('selectionTable2');
+        const table2 = document.getElementById('selectionTable3');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            table2.classList.remove('hidden');
+        }) 
+    }
+
+    function handleAnswerNo2() {
+        document.getElementById("bit2").textContent = "0";
+
+        const table1 = document.getElementById('selectionTable2');
+        const table2 = document.getElementById('selectionTable3');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            table2.classList.remove('hidden');
+        }) 
+        
+    }
+
+    function handleAnswerYes3() {
+        document.getElementById("bit1").textContent = "1";
+
+        const table1 = document.getElementById('selectionTable3');
+        const table2 = document.getElementById('selectionTable4');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            table2.classList.remove('hidden');
+        }) 
+    }
+
+    function handleAnswerNo3() {
+        document.getElementById("bit1").textContent = "0";
+
+        const table1 = document.getElementById('selectionTable3');
+        const table2 = document.getElementById('selectionTable4');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            table2.classList.remove('hidden');
+        }) 
+        
+    }
+
+    function handleAnswerYes4() {
+        document.getElementById("bit0").textContent = "1";
+
+        const table1 = document.getElementById('selectionTable4');
+        const button = document.getElementById('finalButton');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            button.classList.remove('hidden');
+        }) 
+    }
+
+    function handleAnswerNo4() {
+        document.getElementById("bit0").textContent = "0";
+
+        const table1 = document.getElementById('selectionTable4');
+        const button = document.getElementById('finalButton');
+
+        setTimeout(() => {
+            table1.classList.add('hidden');
+            button.classList.remove('hidden');
+        }) 
+    }
+
+    function binaryToDecimal() {
+        // 각 비트 값을 가져오기
+        const b3 = document.getElementById('bit3').textContent.trim();
+        const b2 = document.getElementById('bit2').textContent.trim();
+        const b1 = document.getElementById('bit1').textContent.trim();
+        const b0 = document.getElementById('bit0').textContent.trim();
+
+        // 이진수 문자열 만들기
+        const binaryString = b3 + b2 + b1 + b0;
+
+        // 10진수로 변환
+        const decimalValue = parseInt(binaryString, 2);
+        //const str = decimalValue.toString();
+
+        document.getElementById("decimalResult").textContent = decimalValue;
+
+        const button = document.getElementById('finalButton');
+        const final = document.getElementById('finalResult');
+
+        setTimeout(() => {
+            button.classList.add('hidden');
+            final.classList.remove('hidden');
+        })
+
+    }
+</script>
+</body>
+</html>
